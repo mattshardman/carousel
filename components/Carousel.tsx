@@ -9,7 +9,13 @@ interface Props {
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
-const Pagination = ({ length, unit, shift }) => (
+interface PaginationProps {
+  length: number;
+  unit: number;
+  shift: number;
+}
+
+const Pagination: React.FC<PaginationProps> = ({ length, unit, shift }) => (
   <div className={styles.pagination}>
     <span className={styles.dots}>
       {[...Array(length / unit)].map((_, i) => {
