@@ -1,7 +1,7 @@
 import React from "react";
 
-const useCarousel = ({ children }) => {
-  const unit = 3;
+const useCarousel = ({ children, steps }) => {
+  const unit = steps;
   const SPEED = 0.2;
   const divisor = children.length * 3;
 
