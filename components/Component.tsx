@@ -10,23 +10,18 @@ const RightButton: React.FC<Props> = (props) => (
   <button {...props}>Right</button>
 );
 
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 const Component: React.FC = () => (
   <div className={styles.component}>
     <Carousel LeftButton={LeftButton} RightButton={RightButton}>
-      <div className={styles.square}>
-       1 
-      </div>
-      <div className={styles.square}>2</div>
-      <div className={styles.square}>3</div>
-      <div className={styles.square}>4</div>
-      <div className={styles.square}>5</div>
-      <div className={styles.square}>6</div>
-      <div className={styles.square}>7</div>
-      <div className={styles.square}>8</div>
-      <div className={styles.square}>9</div>
-      <div className={styles.square}>10</div>
-      <div className={styles.square}>11</div>
-      <div className={styles.square}>12</div>
+      {arr.map((each, i) => {
+        return (
+          <div className={styles.square} key={each}>
+            {i}
+          </div>
+        );
+      })}
     </Carousel>
   </div>
 );
