@@ -6,6 +6,7 @@ interface Props {
   children: React.ReactNodeArray;
   LeftButton: React.FC<ButtonProps>;
   RightButton: React.FC<ButtonProps>;
+  steps?: number;
 }
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
@@ -29,8 +30,27 @@ const Pagination: React.FC<PaginationProps> = ({ length, unit, shift }) => (
   </div>
 );
 
-const Carousel: React.FC<Props> = ({ children, LeftButton, RightButton }) => {
-  const { state, api } = useCarousel({ children });
+const CarouselContext = React.createContext({ shift: 0, length: 0 });
+
+export const CarouselItem = ({ children, index, activeComponent }) => {
+  const { shift, length } = React.useContext(CarouselContext);
+
+  const isActiveChild = null;
+
+  if (isActiveChild) {
+    return <div>{activeComponent}</div>;
+  }
+
+  return <div>{children}</div>;
+};
+
+const Carousel: React.FC<Props> = ({
+  children,
+  LeftButton,
+  RightButton,
+  steps = 1,
+}) => {
+  const { state, api } = useCarousel({ children, steps });
 
   const { amount, shift, unit, disableButtons } = state;
   const { handleLeft, handleRight } = api;
@@ -48,9 +68,11 @@ const Carousel: React.FC<Props> = ({ children, LeftButton, RightButton }) => {
             transform: `translate(${amount}%)`,
           }}
         >
-          {children}
-          {children}
-          {children}
+          <CarouselContext.Provider value={{ shift, length: children.length }}>
+            {children}
+            {children}
+            {children}
+          </CarouselContext.Provider>
         </div>
       </div>
 
