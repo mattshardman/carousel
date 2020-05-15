@@ -14,12 +14,7 @@ const Component: React.FC = () => (
   <div className={styles.component}>
     <Carousel LeftButton={LeftButton} RightButton={RightButton}>
       <div className={styles.square}>
-        <img
-          src="https://www.pinclipart.com/picdir/middle/13-136062_coa-illustration-shield-triangular-svg-shield-clipart.png"
-          alt=""
-          height={300}
-          width={300}
-        />
+       1 
       </div>
       <div className={styles.square}>2</div>
       <div className={styles.square}>3</div>
