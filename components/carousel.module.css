@@ -1,6 +1,5 @@
 .component {
     display: flex;
-    border: 1px solid pink;
     align-items: center;
 }
 
@@ -8,7 +7,6 @@
     box-sizing: border-box;
     display: flex;
     justify-content: flex-start;
-    border: 1px solid #000;
     overflow: hidden;
     width: 900px;
 }
@@ -20,13 +18,11 @@
 
 .button {
 
-
 }
 
 .pagination {
     align-items: center;
     position: fixed;
-    border: 1px solid orange;
     left: 0;
     display: flex;
     bottom: 0;
