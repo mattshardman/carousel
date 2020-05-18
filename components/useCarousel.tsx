@@ -1,25 +1,36 @@
 import React from "react";
 
-const useCarousel = ({ children, steps }) => {
-  const unit = steps;
-  const SPEED = 0.2;
-  const divisor = children.length * 3;
+interface Props {
+  length: number;
+  steps: number;
+  speed: number;
+  infinite: boolean;
+}
 
-  const initialShift = -Math.abs(children.length);
+const useCarousel = ({ length, steps, speed, infinite }: Props) => {
+  const unit = steps;
+  const SPEED = speed / 100;
+  const divisor = length * 3;
+
+  const initialShift = -Math.abs(length);
   const initialAmount = -Math.abs((100 / divisor) * initialShift);
 
-  const [disableButtons, setDisableButtons] = React.useState(false);
+  const [disableButtons, setDisableButtons] = React.useState({
+    left: !infinite,
+    right: false,
+  });
   const [shift, setShift] = React.useState(0);
+  const [direction, setDirection] = React.useState<"left" | "right">("right");
+
   const [amount, setAmount] = React.useState(initialAmount);
   const [target, setTarget] = React.useState(initialAmount);
-  const [direction, setDirection] = React.useState<"left" | "right">("right");
 
   const requestRef = React.useRef<any>();
   const previousTimeRef = React.useRef<any>();
 
-  const checkCompleted = () => {
+  const checkCompletedRotation = () => {
     const absShift = Math.abs(shift);
-    const rotationCompleted = absShift >= children.length;
+    const rotationCompleted = absShift >= length;
 
     if (rotationCompleted) {
       setAmount(initialAmount);
@@ -27,6 +38,19 @@ const useCarousel = ({ children, steps }) => {
       setShift(0);
     }
   };
+
+  const checkReachedEnd = () => {
+    const absShift = Math.abs(shift);
+    const reachedEnd = absShift + 1 >= length; 
+
+    if (reachedEnd && direction === "right") {
+      setDisableButtons({ left: false, right: true });
+    }
+
+    if (!absShift) {
+      setDisableButtons({ left: true, right: false });
+    }
+  }
 
   const animate = (time: number) => {
     if (previousTimeRef.current != undefined) {
@@ -38,9 +62,9 @@ const useCarousel = ({ children, steps }) => {
             Math.round(movementAmount * 1000) <= Math.round(target * 1000);
 
           if (hasReachedTarget) {
-            setDisableButtons(false);
+            setDisableButtons({ left: false, right: false });
             cancelAnimationFrame(requestRef.current);
-            checkCompleted();
+            infinite ? checkCompletedRotation() : checkReachedEnd();
             return movementAmount;
           }
           requestAnimationFrame(animate);
@@ -56,9 +80,9 @@ const useCarousel = ({ children, steps }) => {
             Math.floor(movementAmount * 1000) >= Math.floor(target * 1000);
 
           if (hasReachedTarget) {
-            setDisableButtons(false);
+            setDisableButtons({ left: false, right: false });
             cancelAnimationFrame(requestRef.current);
-            checkCompleted();
+            infinite ? checkCompletedRotation() : checkReachedEnd();
             return movementAmount;
           }
           requestAnimationFrame(animate);
@@ -78,14 +102,14 @@ const useCarousel = ({ children, steps }) => {
   }, [target]);
 
   const handleLeft = () => {
-    setDisableButtons(true);
+    setDisableButtons({ left: true, right: true });
     setShift((prev) => prev + unit);
     setDirection("left");
     setTarget(amount + (100 / divisor) * unit);
   };
 
   const handleRight = () => {
-    setDisableButtons(true);
+    setDisableButtons({ left: true, right: true });
     setShift((prev) => prev - unit);
     setDirection("right");
     setTarget(amount - (100 / divisor) * unit);
