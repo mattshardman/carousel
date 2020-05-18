@@ -7,6 +7,8 @@ interface Props {
   LeftButton: React.FC<ButtonProps>;
   RightButton: React.FC<ButtonProps>;
   steps?: number;
+  speed?: number;
+  infinite?: boolean;
 }
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
@@ -48,9 +50,11 @@ const Carousel: React.FC<Props> = ({
   children,
   LeftButton,
   RightButton,
-  steps = 3,
+  steps = 1,
+  speed = 20,
+  infinite = true
 }) => {
-  const { state, api } = useCarousel({ children, steps });
+  const { state, api } = useCarousel({ length: children.length, steps, speed, infinite });
 
   const { amount, shift, unit, disableButtons } = state;
   const { handleLeft, handleRight } = api;
@@ -58,7 +62,7 @@ const Carousel: React.FC<Props> = ({
   return (
     <div className={styles.component}>
       <span className={styles.button}>
-        <LeftButton onClick={handleLeft} disabled={disableButtons} />
+        <LeftButton onClick={handleLeft} disabled={disableButtons.left} />
       </span>
 
       <div className={styles.carousel}>
@@ -77,7 +81,7 @@ const Carousel: React.FC<Props> = ({
       </div>
 
       <span className={styles.button}>
-        <RightButton onClick={handleRight} disabled={disableButtons} />
+        <RightButton onClick={handleRight} disabled={disableButtons.right} />
       </span>
 
       <Pagination length={children.length} unit={unit} shift={shift} />
