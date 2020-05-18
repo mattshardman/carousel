@@ -48,7 +48,7 @@ const Carousel: React.FC<Props> = ({
   children,
   LeftButton,
   RightButton,
-  steps = 1,
+  steps = 3,
 }) => {
   const { state, api } = useCarousel({ children, steps });
 
